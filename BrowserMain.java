@@ -66,4 +66,21 @@ public final class BrowserMain extends Main {
             ((J2SEInputMethod)DeviceFactory.getDevice().getInputMethod()).clipboardPaste(text);
         }});
     }
+
+    // Route committed browser characters into Java ME editors. Canvas games still
+    // receive ordinary key events when no Java ME text editor has focus.
+    public static void typeText(final String text, final int code) {
+        if (instance == null || instance.screen == null || text == null) return;
+        EventQueue.invokeLater(new Runnable() { public void run() {
+            if (org.microemu.device.BrowserTextInput.insert(text)) return;
+            for (int i = 0; i < text.length(); i++) {
+                char character = text.charAt(i);
+                SwingDeviceComponent screen = instance.screen;
+                screen.keyPressed(new KeyEvent(screen, KeyEvent.KEY_PRESSED,
+                    System.currentTimeMillis(), 0, code, character));
+                screen.keyReleased(new KeyEvent(screen, KeyEvent.KEY_RELEASED,
+                    System.currentTimeMillis(), 0, code, character));
+            }
+        }});
+    }
 }

@@ -30,7 +30,10 @@ connector=connector.replace(marker,marker+'''
 ''')
 patched=cache/'ConnectorImpl.java'; patched.write_text(connector,encoding='utf-8')
 classes=cache/'classes'; classes.mkdir(exist_ok=True)
-javafiles=[root/n for n in ['BrowserMain.java','NetworkBridge.java','SocketConnectionImpl.java','HttpConnectionImpl.java']]+[patched]
+# Remove obsolete generated classes so previous local experiments cannot be packed.
+assert classes.resolve().is_relative_to(cache.resolve())
+for file in classes.rglob('*.class'): file.unlink()
+javafiles=[root/n for n in ['BrowserMain.java','BrowserTextInput.java','NetworkBridge.java','SocketConnectionImpl.java','HttpConnectionImpl.java']]+[patched]
 compiler=['java','-jar',args.ecj,'-1.8','-proc:none'] if args.ecj else ['javac','--release','8']
 subprocess.run(compiler+['-encoding','UTF-8','-cp',str(main),'-d',str(classes)]+list(map(str,javafiles)),check=True)
 with ZipFile(web/'microemulator-web.jar','w',ZIP_DEFLATED) as output:

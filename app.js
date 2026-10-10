@@ -31,6 +31,7 @@ async function start(probe=false){
 document.getElementById('start').onclick=()=>start();
 document.getElementById('probe').onclick=()=>start(true);
 document.getElementById('restart').onclick=()=>location.reload();
+document.getElementById('choose-jar').onclick=()=>location.reload();
 const numbers=document.getElementById('numbers');
 for(const char of '123456789*0#'){
   const button=document.createElement('button');button.textContent=char;
@@ -47,3 +48,19 @@ const dialog=document.getElementById('text-dialog'),text=document.getElementById
 document.getElementById('text-button').onclick=()=>{text.value='';dialog.showModal();text.focus();};
 document.getElementById('insert').onclick=async()=>{const value=text.value;if(host)await javaInput(()=>host.paste(value));text.value='';dialog.close();};
 dialog.onclose=()=>{text.value='';};
+
+// Keep Shift and printable keyboard characters out of the
+// emulator's keypad mapping. Scope this to its display, never the HTML dialog.
+const stage=document.getElementById('stage');
+const typedKeys=new Set();
+const stop=e=>{e.preventDefault();e.stopImmediatePropagation();};
+stage.addEventListener('keydown',e=>{
+  if(!host||e.isComposing||(e.ctrlKey&&!e.altKey)||e.metaKey||e.key.length!==1)return;
+  stop(e);typedKeys.add(e.code||e.key);
+  javaInput(()=>host.typeText(e.key,e.keyCode||0));
+},true);
+stage.addEventListener('keyup',e=>{
+  const key=e.code||e.key;
+  if(!typedKeys.delete(key))return;
+  stop(e);
+},true);
