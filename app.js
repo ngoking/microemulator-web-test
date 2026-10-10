@@ -17,11 +17,14 @@ async function start(probe=false){
     const game=probe?await(await fetch('probe.jar')).arrayBuffer():await file.arrayBuffer();
     cheerpOSAddStringFile('/str/game.jar',new Uint8Array(game));
     document.getElementById('setup').hidden=true;document.getElementById('running').hidden=false;
+    document.querySelectorAll('#controls button').forEach(button=>button.disabled=true);
     cheerpjCreateDisplay(240,320,document.getElementById('stage'));
     const lib=await cheerpjRunLibrary('/str/microemulator-web.jar');
-    host=await lib.local.microemu.BrowserMain;
+    const launcher=await lib.local.microemu.BrowserMain;
     status.textContent='Đang mở '+(probe?'bài kiểm tra':file.name)+'...';
-    await host.launch('/str/game.jar');
+    await launcher.launch('/str/game.jar');
+    host=launcher;
+    document.querySelectorAll('#controls button').forEach(button=>button.disabled=false);
     status.textContent='Đã mở giả lập. Dùng cảm ứng, chuột hoặc các nút bên dưới.';
   }catch(error){status.textContent='Không khởi động được: '+error.message+'. Tải lại trang để thử lại.';}
 }
