@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MicroEmulator · Bản thử</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#10171c;color:#e5eef3;font:15px system-ui}main{max-width:700px;margin:auto;padding:16px}h1{font-size:24px;margin:0 0 8px}p{color:#b9cbd5;line-height:1.5}button,input{font:inherit}button{padding:12px;border:1px solid #45606e;background:#223b48;color:white;border-radius:8px;cursor:pointer}button:disabled{opacity:.5}a{color:#85d1fc}.row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}#stage{width:240px;height:320px;position:relative;margin:auto;overflow:hidden;background:#000}#status{min-height:24px}#controls{max-width:440px;margin:12px auto}.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0}.keys button{touch-action:none;user-select:none}details{margin:12px 0}dialog{background:#182a35;color:white;border:1px solid #647d8c;border-radius:12px;max-width:95vw}dialog input{display:block;width:100%;padding:12px;margin:12px 0}#file{max-width:100%}#running[hidden],#setup[hidden]{display:none}
+</style>
+<script src="https://cjrtnc.leaningtech.com/4.3/loader.js"></script></head>
+<body><main><h1>MicroEmulator <small>· bản thử</small></h1>
+<p>Chạy JAR trong trình duyệt. Bản thử độc lập; dữ liệu không dùng chung với web cũ.</p>
+<section id="setup"><label>Chọn game JAR <input id="file" type="file" accept=".jar"></label>
+<div class="row"><button id="start">Mở game đã chọn</button><button id="probe">Chạy kiểm tra</button></div>
+<p>File game được đọc trên thiết bị, không tải lên máy chủ. Lần đầu tải bộ Java có thể mất một lúc.</p></section>
+<p id="status" role="status">Chọn JAR hoặc chạy kiểm tra.</p>
+<section id="running" hidden><div id="stage"></div>
+<div id="controls"><div class="keys"><button data-code="112">Trái / L</button><button data-code="38">↑</button><button data-code="113">Phải / R</button><button data-code="37">←</button><button data-code="10">OK</button><button data-code="39">→</button><button data-code="27">Quay lại</button><button data-code="40">↓</button><button id="text-button">Nhập chữ</button></div>
+<details><summary>Bàn phím số</summary><div class="keys" id="numbers"></div></details>
+<div class="row"><button id="backspace">Xóa ký tự</button><button id="restart">Chọn game khác</button></div></div></section>
+<dialog id="text-dialog"><form method="dialog"><label>Nhập vào ô đang chọn trong game<input id="text-value" type="password" autocomplete="off" autocapitalize="off" spellcheck="false"></label><p>Nội dung chỉ chuyển vào game, không tự bấm đăng nhập.</p><div class="row"><button id="insert" type="button">Nhập vào game</button><button>Hủy</button></div></form></dialog>
+<p><a href="https://j2me-render-online.onrender.com/">Web FreeJ2ME hiện tại</a> · <a href="source/">Mã nguồn</a></p>
+</main><script type="module" src="app.js"></script></body></html>
