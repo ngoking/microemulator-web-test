@@ -5,7 +5,7 @@ import argparse, subprocess, hashlib, shutil
 
 root=Path(__file__).resolve().parent
 cache=root/'build'; cache.mkdir(exist_ok=True)
-web=root/'web'; (web/'source').mkdir(exist_ok=True)
+web=root/'web'; (web/'source').mkdir(parents=True,exist_ok=True)
 for name in ['index.html','app.js','network.js']: shutil.copy(root/name,web/name)
 parser=argparse.ArgumentParser(); parser.add_argument('--ecj'); args=parser.parse_args()
 
